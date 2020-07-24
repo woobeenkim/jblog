@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- 만약 맵퍼 xml추가시 mapper에 관한 에러가 난다면 위의 mapper public 쿼리가 들어가 있는지 확인하기. -->
+<mapper namespace="blog">
+
+	<select id="getcontent" parameterType="String"
+		resultType="com.javaex.vo.BlogVo">
+	
+		<![CDATA[
+		select		id, blogTitle, logoFile, userName
+		from		blog
+		where id =  #{id}
+		]]>
+	</select>
+	
+	<select id="getcate" parameterType="String"
+		resultType="com.javaex.vo.BlogVo">
+	
+		<![CDATA[
+		select		id,
+					blogTitle,
+					logoFile,
+					userName
+		from		blog
+		where id =  #{id}
+		]]>
+	</select>
+	
+	<insert id = "insertcate" parameterType="com.javaex.vo.CategoryVo">
+		<![CDATA[
+			insert into category
+			values(seq_category_no.nextval,
+				  #{id},
+				  #{cateName},
+				  #{description},
+				  sysdate,
+				  #{count})
+		]]>
+	</insert>
+
+	
+
+
+</mapper>
