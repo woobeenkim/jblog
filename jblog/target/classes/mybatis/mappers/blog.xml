@@ -12,7 +12,7 @@
 		where id =  #{id}
 		]]>
 	</select>
-	
+
 	<select id="getcate" parameterType="String"
 		resultType="com.javaex.vo.BlogVo">
 	
@@ -25,20 +25,108 @@
 		where id =  #{id}
 		]]>
 	</select>
+
+	<update id="chgbasic" parameterType="com.javaex.vo.BlogVo">
+		<![CDATA[
+			update		blog
+			set		id= #{id},
+						blogTitle = #{blogTitle},
+						logoFile = #{logoFile}
+		]]>
+	</update>
 	
-	<insert id = "insertcate" parameterType="com.javaex.vo.CategoryVo">
+	<select id="count" resultType="int">
+	
+		select	count(cateNo)
+		from	category	
+	
+	</select>
+	
+	<select id="selectbyNo" parameterType="int" resultType="com.javaex.vo.CategoryVo">
+	
+		<![CDATA[
+		select		cateNo,
+					id,
+					cateName,
+					description,
+					regDate,
+					count
+		from		category
+		where		cateNo = ${cateNo}
+		]]>
+	
+	</select>
+	
+	<insert id="insertcate" parameterType="com.javaex.vo.CategoryVo">
+		<selectKey keyProperty="cateNo" resultType="int" order="BEFORE">	
+			select seq_category_no.nextval from dual
+		</selectKey>
 		<![CDATA[
 			insert into category
-			values(seq_category_no.nextval,
-				  #{id},
-				  #{cateName},
-				  #{description},
-				  sysdate,
-				  #{count})
+			values(		#{cateNo},
+				  		#{id},
+						#{cateName},
+						#{description},
+						sysdate,
+						#{count})
 		]]>
 	</insert>
-
 	
+		<select id="list" resultType="com.javaex.vo.CategoryVo">
+	
+		<![CDATA[
+		select		cateNo,
+					id,
+					cateName,
+					description,
+					regDate,
+					count
+		from		category
+		order by	cateNo	desc
+		]]>
+	</select>
+	
+	<delete id="delete" parameterType="int">
+	
+		<![CDATA[
+			delete		category
+			where		cateNo = #{cateNo}
+		]]>
+		
+	</delete>
+	
+	<insert id="write" parameterType="com.javaex.vo.PostVo">
+	
+	<![CDATA[
+			insert into post
+			values(		seq_post_no.nextval,
+						#{cateNo},
+						#{postTitle},
+						#{postContent},
+						sysdate
+					)
+		]]>
+	
+	</insert>
+	
+	<select id="plist" resultType="com.javaex.vo.PostVo">
+	
+	<![CDATA[
+		select		postNo,
+					cateNo,
+					postTitle,
+					postContent,
+					regDate
+		from		post
+		where		cateNo=#{cateNo}
+		]]>
+	
+	
+	</select>
+	
+	
+
+
 
 
 </mapper>

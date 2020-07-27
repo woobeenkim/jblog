@@ -33,8 +33,8 @@
 						<strong>카테고리</strong>
 					</div>
 					<ul id="cateList" class="text-left">
-						<c:forEach items="${cateList}" var="cateVo">
-							<li><a href="${pageContext.request.contextPath}/${blogVo.id}?crtCateNo=${cateVo.cateNo}">${cateVo.cateName}</a></li>
+						<c:forEach items="${cateList}" var="catevo">
+							<li><a href="${pageContext.request.contextPath}/${blogvo.id}?CateNo=${catevo.cateNo}">${catevo.cateName}</a></li>
 						</c:forEach>
 					</ul>
 				</div>
@@ -42,21 +42,21 @@
 			<!-- profilecate_area -->
 			
 			<div id="post_area">
-				<c:if test="${not empty postVo}">
+				<c:if test="${not empty postvo}">
 					<div id="postBox" class="clearfix">
-							<div id="postTitle" class="text-left"><strong>${postVo.postTitle}</strong></div>
-							<div id="postDate" class="text-left"><strong>${postVo.regDate}</strong></div>
+							<div id="postTitle" class="text-left"><strong>${postvo.postTitle}</strong></div>
+							<div id="postDate" class="text-left"><strong>${postvo.regDate}</strong></div>
 							<div id="postNick">래미(iremys)님</div>
 					</div>
 					<!-- //postBox -->
 				
 					<div id="post" >
-						${fn:replace(postVo.postContent, newLine, "<br>") }
+						${fn:replace(postvo.postContent, newLine, "<br>") }
 					</div>
 					<!-- //post -->
 				</c:if>
 				
-				<c:if test="${empty postVo}">
+				<c:if test="${empty postvo}">
 					<div id="postBox" class="clearfix">
 							<div id="postTitle" class="text-left"><strong>등록된 글이 없습니다.</strong></div>
 							<div id="postDate" class="text-left"><strong></strong></div>
@@ -76,10 +76,10 @@
 							<col style="">
 							<col style="width: 20%;">
 						</colgroup>
-						<c:forEach items="${postList}" var="postVo">
+						<c:forEach items="${pList}" var="postvo">
 							<tr>
-								<td class="text-left"><a href="${pageContext.request.contextPath}/${blogVo.id}?crtCateNo=${param.crtCateNo}&postNo=${postVo.postNo}">${postVo.postTitle}</a></td>
-								<td class="text-right">${postVo.regDate}</td>
+								<td class="text-left"><a href="${pageContext.request.contextPath}/${blogvo.id}?CateNo=${postvo.cateNo}&postNo=${postvo.postNo}&postTitle=${postvo.postTitle}&postContent=${postvo.postContent}&regDate=${postvo.regDate}">${postvo.postTitle}</a></td>
+								<td class="text-right">${postvo.regDate}</td>
 							</tr>
 						</c:forEach>
 					</table>
@@ -99,5 +99,42 @@
 	
 	</div>
 	<!-- //wrap -->
+
 </body>
+<script type="text/javascript">
+
+	$("#postbox").on("click",function(){
+		console.log("클릭");
+	})
+	
+	function render(postvo){
+		var str = "";
+		str +="<c:if test='${not empty postvo}'>";
+		str +="<div id='postbox' class='clearfix'";		
+		str +="<div id='postTitle' class='text-left'><strong>"+postvo.postTitle+"</strong></div>";		
+		str +="<div id='postDate' class='text-left'><strong>"+postvo.regDate+"</strong></div>";		
+		str +="<div id='postNick'>래미(iremys)님</div>";		
+		str +="</div>";		
+		str +="<div id='post' >fn:replace("+postvo.postContent+", newLine, '<br>') +</div>";		
+		str +="</c:if>";		
+		str +="<c:if test="+empty postvo+">";		
+		str +="<div id='postBox' class='clearfix'>";		
+		str +="<div id='postTitle' class='text-left'><strong>등록된 글이 없습니다.</strong></div>";		
+		str +="<div id='postDate' class='text-left'><strong></strong></div>";		
+		str +="<div id='postNick'></div>";		
+		str +="</div>";		
+		str +="<div id='post'>";		
+		str +="</div>";		
+		str +="</c:if>";	
+		
+		$("#post_Area").append(str);
+	
+		}
+
+
+	
+	
+
+</script>
+
 </html>

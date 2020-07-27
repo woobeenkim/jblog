@@ -26,7 +26,7 @@
 				<li class="tabbtn"><a
 					href="${pageContext.request.contextPath}/${authUser.id}/admin/cate">카테고리</a></li>
 				<li class="tabbtn"><a
-					href="${pageContext.request.contextPath}/${authUser.id}/admin/write">글작성</a></li>
+					href="${pageContext.request.contextPath}/${authUser.id}/admin/wform">글작성</a></li>
 			</ul>
 			<!-- //admin-menu -->
 
@@ -51,15 +51,7 @@
 					</thead>
 					<tbody id="cateList">
 						<!-- 리스트 영역 -->
-						<tr>
-							<td>1</td>
-							<td>자바프로그래밍</td>
-							<td>7</td>
-							<td>자바기초와 객체지향</td>
-							<td class='text-center'><img class="btnCateDel"
-								src="${pageContext.request.contextPath}/assets/images/delete.jpg">
-							</td>
-						</tr>
+
 						<!-- 리스트 영역 -->
 					</tbody>
 				</table>
@@ -71,7 +63,7 @@
 					</colgroup>
 					<tr>
 						<td class="t">카테고리명</td>
-						<td><input type="text" name="name" value=""></td>
+						<td><input id="name" type="text" name="name"></td>
 					</tr>
 					<tr>
 						<td class="t">설명</td>
@@ -99,41 +91,82 @@
 
 <script type="text/javascript">
 
+
+	$(document).ready(function(){
+	
+		fetchList();
+	});
+
 	$("#btnAddCate").on("click",function(){
 		
 		console.log("클릭.");
+		var Name = $("#name").val();
+		var desc = $("#desc").val();
 		
-
+		var categoryvo = {cateName:Name,
+						  description:desc};
+		
+		console.log(categoryvo);
+	
+		$.ajax({
+					
+					url : "${pageContext.request.contextPath }/${id}/admin/insertcate",		
+					type : "post",
+					//contentType : "application/json",
+					data :  categoryvo,
+					
+					//contentType : "application/json",
+					//data :  JSON.stringify(personvo),
+					
+					//json방식 사용할땐 contenttype과 data의 형식을 맞춰줘야 한다.
+					
+					dataType : "json",
+					success : function(categoryvo){
+						console.log(categoryvo);
+						render(categoryvo);
+					},
+					error : function(XHR, status, error) {
+						console.error(status + " : " + error);
+					}
+				});
 	
 
-	})
-	/*
+	});
+
+$("#cateList").on("click",function(){
+	
+	console.log("클릭");
+	
+	var no = $(this).data("cateNo");
+	console.log(no);
+	
 	$.ajax({
-
-			url : "${pageContext.request.contextPath }/{id}/insertcate",
-			type : "post",
-			//contentType : "application/json",
-			data : {
-				catename : catename,
-				description : description
-			},
-
-			//비교값:실제가져온 값
-			dataType : "json",
-			success : function(categoryvo) {
-				
-				
-			},
-			error : function(XHR, status, error) {
-				console.error(status + " : " + error);
+		
+		url : "${pageContext.request.contextPath }/{id}/admin/catedelete",		
+		type : "post",
+		//contentType : "application/json",
+		data : {cateNo:no},
+		
+		//비교값:실제가져온 값
+		dataType : "json",
+		success : function(count){
+			console.log(count);
+			if(count < 1){
+				 cateNo.remove();
+			}else{
+				alert('삭제할 수 없습니다.');
 			}
+		},
+		error : function(XHR, status, error) {
+			console.error(status + " : " + error);
+		}
+	});
 	
-		});
-	*/
+})
 	function fetchList() {
 		$.ajax({
 
-			url : "${pageContext.request.contextPath}/${id}",
+			url : "${pageContext.request.contextPath}/list",
 			type : "post",
 			//contentType : "application/json",
 			//data : {name: "홍길동"},
@@ -154,12 +187,12 @@
 	function render(categoryvo) {
 		var str = "";
 		str += "<tr>";
-		str += "<td>${categoryvo.cateNo}</td>";
-		str += "<td>${categoeyvo.cateName}</td>";
-		str += "<td>${categoryvo.count}</td>";
-		str = "<td>${categoryvo.description}</td>";
+		str += "<td>"+categoryvo.cateNo+"</td>";
+		str += "<td>"+categoryvo.cateName+"</td>";
+		str += "<td>"+categoryvo.count+"</td>";
+		str += "<td>"+categoryvo.description+"</td>";
 		str += "<td class='text-center'>";
-		str += "<img class='btnCateDel' src='${pageContext.request.contextPath}/assets/images/delete.jpg'>";
+		str += "<img class='btnCateDel' data-cateNo = "+categoryvo.cateNo+" src=${pageContext.request.contextPath}/assets/images/delete.jpg>";
 		str += "	</td>";
 		str += "</tr>";
 

@@ -73,10 +73,8 @@
 		var uId = $("#txtId").val();
 		
 		console.log(uId);
+	
 		
-		var uerInfo ={
-			userId: uId
-		}
 		
 		$.ajax({
 			url : "${pageContext.request.contextPath }/user/idcheck",		
@@ -91,7 +89,7 @@
 				/*성공시 처리해야될 코드 작성*/
 				if(result == true){
 					$("#tdMsg").text("사용가능");
-				}else {
+				}else{
 					$("#tdMsg").text("사용불가");
 				}
 			},
@@ -103,6 +101,25 @@
 		
 		
 	} );
+	
+	$("#btnJoin").on("click",function(){
+		
+		var pass = $("#txtPassword").val();
+		var name = $("#txtUserName").val();
+		var agree = $("#chkAgree").val();
+		var uerInfo ={
+			userId: uId
+		}
+		if(uId ==""){
+			alert('아이디를 입력해주세요.');
+		}if(pass==""){
+			alert('비밀번호를 입력해주세요.');
+		}if(name==""){
+			alert('이름를 입력해주세요.');
+		}if(agree!="y"){
+			alert('서비스 약관에 동의해주세요.');
+		}
+	});
 </script>
 
 
